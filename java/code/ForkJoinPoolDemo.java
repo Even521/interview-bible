@@ -42,7 +42,7 @@ public class ForkJoinPoolDemo {
         System.out.println("\n========================================");
         System.out.println("演示结束！");
         System.out.println("========================================");
-    }Java 并发包常见类：CountDownLatch、CyclicBarrier、Semaphore、Exchanger。 • Future、CompletableFuture 的区别，allOf/anyOf 实现原理。 • ForkJoinPool 的分治思想。 • 线程池参数（core/max/queue/拒绝策略）设计思路。
+    }
 
     /**
      * Fork/Join 框架介绍
