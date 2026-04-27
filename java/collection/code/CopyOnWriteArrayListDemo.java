@@ -1,10 +1,7 @@
-package code;
-
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.CountDownLatch;
+
 
 /**
  * CopyOnWriteArrayList 适用场景演示
@@ -110,7 +107,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("    try {");
         System.out.println("        Object[] elements = getArray();");
         System.out.println("        int len = elements.length;");
-        System.out.println("        Object[] newElements = Arrays.copyOf(elements, len + 1);");
+        System.out.println(
+            "        Object[] newElements = Arrays.copyOf(elements, len + 1);"
+        );
         System.out.println("        newElements[len] = e;");
         System.out.println("        setArray(newElements); // 原子替换引用");
         System.out.println("        return true;");
@@ -143,7 +142,8 @@ public class CopyOnWriteArrayListDemo {
     /**
      * 演示迭代器安全性（弱一致性）
      */
-    private static void demonstrateIteratorSafety() throws InterruptedException {
+    private static void demonstrateIteratorSafety()
+        throws InterruptedException {
         System.out.println("【演示3】迭代器弱一致性（快照特性）");
         System.out.println("----------------------------------------");
 
@@ -189,7 +189,9 @@ public class CopyOnWriteArrayListDemo {
                 }
             }
         } catch (ConcurrentModificationException e) {
-            System.out.println("ArrayList: 抛出 ConcurrentModificationException！");
+            System.out.println(
+                "ArrayList: 抛出 ConcurrentModificationException！"
+            );
         }
 
         System.out.println("\n【CopyOnWriteArrayList 的情况】");
@@ -202,10 +204,14 @@ public class CopyOnWriteArrayListDemo {
                 cowList.remove(s); // 安全！遍历的是快照，修改不影响迭代器
             }
         }
-        System.out.println("CopyOnWriteArrayList: 可以安全遍历并修改，最终列表: " + cowList);
+        System.out.println(
+            "CopyOnWriteArrayList: 可以安全遍历并修改，最终列表: " + cowList
+        );
 
         System.out.println("\n【弱一致性特点】");
-        System.out.println("✓ 遍历过程中修改不会抛出 ConcurrentModificationException");
+        System.out.println(
+            "✓ 遍历过程中修改不会抛出 ConcurrentModificationException"
+        );
         System.out.println("✓ 迭代器看到的是获取时的快照，不会看到后续修改");
         System.out.println("✗ 可能读到旧数据（非实时一致性）");
         System.out.println();
@@ -214,7 +220,8 @@ public class CopyOnWriteArrayListDemo {
     /**
      * 性能对比测试
      */
-    private static void demonstratePerformanceComparison() throws InterruptedException {
+    private static void demonstratePerformanceComparison()
+        throws InterruptedException {
         System.out.println("【演示4】性能对比测试（读多写少 vs 读写均衡）");
         System.out.println("----------------------------------------");
 
@@ -228,7 +235,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("CopyOnWriteArrayList: " + cowTime + " ms");
 
         // 测试 Collections.synchronizedList
-        List<Integer> syncList = Collections.synchronizedList(new ArrayList<>());
+        List<Integer> syncList = Collections.synchronizedList(
+            new ArrayList<>()
+        );
         long syncTime = testReadHeavyScenario(syncList, operations, readRatio);
         System.out.println("Collections.synchronizedList: " + syncTime + " ms");
 
@@ -238,7 +247,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("Vector: " + vectorTime + " ms");
 
         System.out.println("\n【场景2：读写均衡（50%读，50%写）】");
-        System.out.println("(CopyOnWriteArrayList 在此场景性能极差，数据量减小)");
+        System.out.println(
+            "(CopyOnWriteArrayList 在此场景性能极差，数据量减小)"
+        );
 
         operations = 10000; // 减少数据量
         readRatio = 1; // 1:1 = 50%读
@@ -254,10 +265,14 @@ public class CopyOnWriteArrayListDemo {
             }
         }
         long cowTime2 = System.currentTimeMillis() - startTime;
-        System.out.println("CopyOnWriteArrayList: " + cowTime2 + " ms (写多性能差)");
+        System.out.println(
+            "CopyOnWriteArrayList: " + cowTime2 + " ms (写多性能差)"
+        );
 
         // synchronizedList
-        List<Integer> syncList2 = Collections.synchronizedList(new ArrayList<>());
+        List<Integer> syncList2 = Collections.synchronizedList(
+            new ArrayList<>()
+        );
         startTime = System.currentTimeMillis();
         for (int i = 0; i < operations; i++) {
             if (i % 2 == 0) {
@@ -267,11 +282,17 @@ public class CopyOnWriteArrayListDemo {
             }
         }
         long syncTime2 = System.currentTimeMillis() - startTime;
-        System.out.println("Collections.synchronizedList: " + syncTime2 + " ms");
+        System.out.println(
+            "Collections.synchronizedList: " + syncTime2 + " ms"
+        );
 
         System.out.println("\n【性能结论】");
-        System.out.println("读多写少：CopyOnWriteArrayList >> synchronizedList > Vector");
-        System.out.println("读写均衡：CopyOnWriteArrayList << synchronizedList, Vector");
+        System.out.println(
+            "读多写少：CopyOnWriteArrayList >> synchronizedList > Vector"
+        );
+        System.out.println(
+            "读写均衡：CopyOnWriteArrayList << synchronizedList, Vector"
+        );
         System.out.println("原因：CopyOnWriteArrayList 每次写都要复制整个数组");
         System.out.println();
     }
@@ -281,7 +302,11 @@ public class CopyOnWriteArrayListDemo {
      */
     private static long startTime;
 
-    private static long testReadHeavyScenario(List<Integer> list, int operations, int readRatio) {
+    private static long testReadHeavyScenario(
+        List<Integer> list,
+        int operations,
+        int readRatio
+    ) {
         // 初始化数据
         for (int i = 0; i < 100; i++) {
             list.add(i);
@@ -305,7 +330,8 @@ public class CopyOnWriteArrayListDemo {
                     }
                 }
                 latch.countDown();
-            }).start();
+            })
+                .start();
         }
 
         try {
@@ -325,7 +351,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("----------------------------------------");
 
         System.out.println("【场景1：事件监听器列表】");
-        System.out.println("特点：监听器注册一次（写少），但事件触发时遍历所有监听器（读多）");
+        System.out.println(
+            "特点：监听器注册一次（写少），但事件触发时遍历所有监听器（读多）"
+        );
         demonstrateEventListener();
 
         System.out.println("\n【场景2：配置项列表（读多写少）】");
@@ -333,7 +361,9 @@ public class CopyOnWriteArrayListDemo {
         demonstrateConfiguration();
 
         System.out.println("\n【场景3：路由表/白名单】");
-        System.out.println("特点：路由规则很少修改，但每个请求都要检查（高频读）");
+        System.out.println(
+            "特点：路由规则很少修改，但每个请求都要检查（高频读）"
+        );
         demonstrateRouteTable();
 
         System.out.println("\n【场景4：缓存键列表】");
@@ -355,7 +385,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("\n-- 事件监听器示例 --");
 
         class EventManager {
-            private CopyOnWriteArrayList<EventListener> listeners = new CopyOnWriteArrayList<>();
+
+            private CopyOnWriteArrayList<EventListener> listeners =
+                new CopyOnWriteArrayList<>();
 
             public void addListener(EventListener listener) {
                 listeners.add(listener);
@@ -391,7 +423,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("\n-- 配置项示例 --");
 
         class ConfigManager {
-            private CopyOnWriteArrayList<String> whitelist = new CopyOnWriteArrayList<>();
+
+            private CopyOnWriteArrayList<String> whitelist =
+                new CopyOnWriteArrayList<>();
 
             public void addIp(String ip) {
                 whitelist.add(ip);
@@ -408,8 +442,13 @@ public class CopyOnWriteArrayListDemo {
         config.addIp("192.168.1.2");
 
         System.out.println("检查IP是否允许:");
-        System.out.println("  192.168.1.1 " + (config.isAllowed("192.168.1.1") ? "允许" : "拒绝"));
-        System.out.println("  10.0.0.1 " + (config.isAllowed("10.0.0.1") ? "允许" : "拒绝"));
+        System.out.println(
+            "  192.168.1.1 " +
+                (config.isAllowed("192.168.1.1") ? "允许" : "拒绝")
+        );
+        System.out.println(
+            "  10.0.0.1 " + (config.isAllowed("10.0.0.1") ? "允许" : "拒绝")
+        );
     }
 
     /**
@@ -419,7 +458,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("\n-- 路由表示例 --");
 
         class SimpleRouter {
-            private CopyOnWriteArrayList<Route> routes = new CopyOnWriteArrayList<>();
+
+            private CopyOnWriteArrayList<Route> routes =
+                new CopyOnWriteArrayList<>();
 
             public void addRoute(String path, String service) {
                 routes.add(new Route(path, service));
@@ -440,13 +481,19 @@ public class CopyOnWriteArrayListDemo {
         router.addRoute("/api/orders", "OrderService");
 
         System.out.println("路由请求:");
-        System.out.println("  /api/users/list -> " + router.route("/api/users/list"));
-        System.out.println("  /api/orders/123 -> " + router.route("/api/orders/123"));
+        System.out.println(
+            "  /api/users/list -> " + router.route("/api/users/list")
+        );
+        System.out.println(
+            "  /api/orders/123 -> " + router.route("/api/orders/123")
+        );
     }
 
     static class Route {
+
         String path;
         String service;
+
         Route(String path, String service) {
             this.path = path;
             this.service = service;
@@ -460,7 +507,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("\n-- 缓存键列表示例 --");
 
         class CacheKeyManager {
-            private CopyOnWriteArrayList<String> hotKeys = new CopyOnWriteArrayList<>();
+
+            private CopyOnWriteArrayList<String> hotKeys =
+                new CopyOnWriteArrayList<>();
 
             public void updateHotKeys(List<String> newKeys) {
                 // 批量替换（本质是多次写）
@@ -475,12 +524,22 @@ public class CopyOnWriteArrayListDemo {
         }
 
         CacheKeyManager manager = new CacheKeyManager();
-        List<String> keys = Arrays.asList("user:1001", "user:1002", "order:500");
+        List<String> keys = Arrays.asList(
+            "user:1001",
+            "user:1002",
+            "order:500"
+        );
         manager.updateHotKeys(keys);
 
         System.out.println("热键检查:");
-        System.out.println("  user:1001 " + (manager.isHotKey("user:1001") ? "是热键" : "非热键"));
-        System.out.println("  product:999 " + (manager.isHotKey("product:999") ? "是热键" : "非热键"));
+        System.out.println(
+            "  user:1001 " +
+                (manager.isHotKey("user:1001") ? "是热键" : "非热键")
+        );
+        System.out.println(
+            "  product:999 " +
+                (manager.isHotKey("product:999") ? "是热键" : "非热键")
+        );
     }
 
     /**
@@ -492,11 +551,15 @@ public class CopyOnWriteArrayListDemo {
 
         System.out.println("【场景1：写操作频繁】");
         System.out.println("❌ 每次写都要复制整个数组，性能极差");
-        System.out.println("   替代方案：Collections.synchronizedList 或 ConcurrentLinkedQueue");
+        System.out.println(
+            "   替代方案：Collections.synchronizedList 或 ConcurrentLinkedQueue"
+        );
 
         System.out.println("\n【场景2：数据量大】");
         System.out.println("❌ 复制大数组开销大，内存占用高");
-        System.out.println("   示例：100万元素的列表，每次添加都要复制100万+1个引用");
+        System.out.println(
+            "   示例：100万元素的列表，每次添加都要复制100万+1个引用"
+        );
         System.out.println("   替代方案：分段锁或其他并发集合");
 
         System.out.println("\n【场景3：需要实时一致性】");
@@ -507,7 +570,9 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("\n【场景4：内存敏感】");
         System.out.println("❌ 写操作期间内存中存在两个数组");
         System.out.println("   旧数组用于未完成的读操作，新数组用于新读操作");
-        System.out.println("   替代方案：普通 ArrayList + 手动同步（单写多读）");
+        System.out.println(
+            "   替代方案：普通 ArrayList + 手动同步（单写多读）"
+        );
 
         System.out.println("\n【不适合场景总结】");
         System.out.println("✗ 写操作频繁（写:读 >= 1:1）");
@@ -551,23 +616,51 @@ public class CopyOnWriteArrayListDemo {
         System.out.println("   特点：高并发性能更好，但非List接口");
 
         System.out.println("\n【对比表格】");
-        System.out.println("┌─────────────────────┬──────────┬────────────┬─────────┬──────────┐");
-        System.out.println("│ 特性                │ COW-List │ Sync-List  │ Vector  │ CL-Queue │");
-        System.out.println("├─────────────────────┼──────────┼────────────┼─────────┼──────────┤");
-        System.out.println("│ 读锁                │ 无       │ synchronized │ synchronized │ CAS      │");
-        System.out.println("│ 写锁                │ 有       │ synchronized │ synchronized │ CAS      │");
-        System.out.println("│ 读多写少性能        │ 极好     │ 一般       │ 一般    │ 好       │");
-        System.out.println("│ 读写均衡性能        │ 差       │ 一般       │ 一般    │ 好       │");
-        System.out.println("│ 写多性能            │ 极差     │ 一般       │ 差      │ 好       │");
-        System.out.println("│ 内存占用            │ 高       │ 低         │ 低      │ 低       │");
-        System.out.println("│ 迭代器一致性        │ 弱       │ 强         │ 强      │ 弱       │");
-        System.out.println("│ 可迭代中修改        │ ✅       │ ❌需手动   │ ❌需手动 │ ✅       │");
-        System.out.println("└─────────────────────┴──────────┴────────────┴─────────┴──────────┘");
+        System.out.println(
+            "┌─────────────────────┬──────────┬────────────┬─────────┬──────────┐"
+        );
+        System.out.println(
+            "│ 特性                │ COW-List │ Sync-List  │ Vector  │ CL-Queue │"
+        );
+        System.out.println(
+            "├─────────────────────┼──────────┼────────────┼─────────┼──────────┤"
+        );
+        System.out.println(
+            "│ 读锁                │ 无       │ synchronized │ synchronized │ CAS      │"
+        );
+        System.out.println(
+            "│ 写锁                │ 有       │ synchronized │ synchronized │ CAS      │"
+        );
+        System.out.println(
+            "│ 读多写少性能        │ 极好     │ 一般       │ 一般    │ 好       │"
+        );
+        System.out.println(
+            "│ 读写均衡性能        │ 差       │ 一般       │ 一般    │ 好       │"
+        );
+        System.out.println(
+            "│ 写多性能            │ 极差     │ 一般       │ 差      │ 好       │"
+        );
+        System.out.println(
+            "│ 内存占用            │ 高       │ 低         │ 低      │ 低       │"
+        );
+        System.out.println(
+            "│ 迭代器一致性        │ 弱       │ 强         │ 强      │ 弱       │"
+        );
+        System.out.println(
+            "│ 可迭代中修改        │ ✅       │ ❌需手动   │ ❌需手动 │ ✅       │"
+        );
+        System.out.println(
+            "└─────────────────────┴──────────┴────────────┴─────────┴──────────┘"
+        );
 
         System.out.println("\n【选择建议】");
         System.out.println("• 读多写少 + 数据量小：CopyOnWriteArrayList");
-        System.out.println("• 读写均衡 + 需要强一致：Collections.synchronizedList");
-        System.out.println("• 高并发 + 队列场景：ConcurrentLinkedQueue / BlockingQueue");
+        System.out.println(
+            "• 读写均衡 + 需要强一致：Collections.synchronizedList"
+        );
+        System.out.println(
+            "• 高并发 + 队列场景：ConcurrentLinkedQueue / BlockingQueue"
+        );
         System.out.println("• 避免使用：Vector（已过时）");
         System.out.println();
     }

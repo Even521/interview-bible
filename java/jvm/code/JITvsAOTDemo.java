@@ -1,5 +1,3 @@
-package code;
-
 /**
  * JIT vs AOT 编译演示与对比
  *

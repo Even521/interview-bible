@@ -1,5 +1,3 @@
-package code;
-
 import java.io.*;
 import java.lang.reflect.Method;
 
@@ -54,30 +52,46 @@ public class ClassLoaderDemo {
 
         // 获取扩展类加载器（Extension ClassLoader - JDK9+ 为 Platform ClassLoader）
         ClassLoader extClassLoader = appClassLoader.getParent();
-        System.out.println("扩展类加载器（PlatformClassLoader）: " + extClassLoader);
+        System.out.println(
+            "扩展类加载器（PlatformClassLoader）: " + extClassLoader
+        );
 
         // 获取启动类加载器（Bootstrap ClassLoader）- 返回 null 因为是 C++ 实现
         ClassLoader bootstrapClassLoader = extClassLoader.getParent();
-        System.out.println("启动类加载器（BootstrapClassLoader）: " + bootstrapClassLoader);
+        System.out.println(
+            "启动类加载器（BootstrapClassLoader）: " + bootstrapClassLoader
+        );
 
         System.out.println("\n【类加载器 Delegation Chain】");
-        System.out.println("Bootstrap ClassLoader <- Platform ClassLoader <- App ClassLoader <- Custom ClassLoader");
-        System.out.println("   (null)                (PlatformClassLoader)      (AppClassLoader)      (MyClassLoader)");
+        System.out.println(
+            "Bootstrap ClassLoader <- Platform ClassLoader <- App ClassLoader <- Custom ClassLoader"
+        );
+        System.out.println(
+            "   (null)                (PlatformClassLoader)      (AppClassLoader)      (MyClassLoader)"
+        );
 
         System.out.println("\n【加载路径】");
-        System.out.println("Bootstrap:   jre/lib/rt.jar (JDK8) 或 jmods (JDK9+)");
-        System.out.println("Platform:  jre/lib/ext/*.jar (JDK8) 或系统类 (JDK9+)");
+        System.out.println(
+            "Bootstrap:   jre/lib/rt.jar (JDK8) 或 jmods (JDK9+)"
+        );
+        System.out.println(
+            "Platform:  jre/lib/ext/*.jar (JDK8) 或系统类 (JDK9+)"
+        );
         System.out.println("App:        classpath");
         System.out.println("Custom:    自定义路径");
 
         // 加载类的来源
         System.out.println("\n【常用类的加载器】");
-        System.out.println("String.class.getClassLoader(): " +
-            String.class.getClassLoader()); // null - Bootstrap
-        System.out.println("ClassLoaderDemo.class.getClassLoader(): " +
-            ClassLoaderDemo.class.getClassLoader()); // App
-        System.out.println("Parent.class.getClassLoader(): " +
-            Parent.class.getClassLoader()); // App
+        System.out.println(
+            "String.class.getClassLoader(): " + String.class.getClassLoader()
+        ); // null - Bootstrap
+        System.out.println(
+            "ClassLoaderDemo.class.getClassLoader(): " +
+                ClassLoaderDemo.class.getClassLoader()
+        ); // App
+        System.out.println(
+            "Parent.class.getClassLoader(): " + Parent.class.getClassLoader()
+        ); // App
 
         System.out.println();
     }
@@ -89,14 +103,18 @@ public class ClassLoaderDemo {
         System.out.println("【演示2】类加载的5个阶段");
         System.out.println("----------------------------------------");
 
-        System.out.println("类加载完整生命周期：Loading -> Verification -> Preparation -> Resolution -> Initialization");
+        System.out.println(
+            "类加载完整生命周期：Loading -> Verification -> Preparation -> Resolution -> Initialization"
+        );
         System.out.println();
 
         System.out.println("【阶段1: 加载（Loading）】");
         System.out.println("- 通过全限定名获取二进制字节流");
         System.out.println("- 将字节流转换为方法区的运行时数据结构");
         System.out.println("- 在堆中生成 Class 对象，作为方法区数据的访问入口");
-        System.out.println("- 字节流来源：本地文件、网络、数据库、动态代理生成等");
+        System.out.println(
+            "- 字节流来源：本地文件、网络、数据库、动态代理生成等"
+        );
         System.out.println();
 
         System.out.println("【阶段2: 验证（Verification）】");
@@ -108,9 +126,15 @@ public class ClassLoaderDemo {
         System.out.println();
 
         System.out.println("【阶段3: 准备（Preparation）】");
-        System.out.println("- 为类变量（static）分配内存，设置零值（0、null、false）");
-        System.out.println("- 例如：static int a = 123; 在此阶段 a = 0，不是 123");
-        System.out.println("- 如果是 final static 常量，在此阶段直接赋值为 123（编译期确定）");
+        System.out.println(
+            "- 为类变量（static）分配内存，设置零值（0、null、false）"
+        );
+        System.out.println(
+            "- 例如：static int a = 123; 在此阶段 a = 0，不是 123"
+        );
+        System.out.println(
+            "- 如果是 final static 常量，在此阶段直接赋值为 123（编译期确定）"
+        );
         System.out.println();
 
         System.out.println("【阶段4: 解析（Resolution）】");
@@ -122,7 +146,9 @@ public class ClassLoaderDemo {
         System.out.println();
 
         System.out.println("【阶段5: 初始化（Initialization）】");
-        System.out.println("- 执行 <clinit>() 方法（静态变量赋值 + 静态代码块）");
+        System.out.println(
+            "- 执行 <clinit>() 方法（静态变量赋值 + 静态代码块）"
+        );
         System.out.println("- 按源码中出现的顺序执行");
         System.out.println("- 父类先于子类初始化");
         System.out.println("- 线程安全（加锁）");
@@ -154,7 +180,9 @@ public class ClassLoaderDemo {
 
         System.out.println("【源码分析 ClassLoader.loadClass()】");
         System.out.println("// 伪代码");
-        System.out.println("protected Class<?> loadClass(String name, boolean resolve) {");
+        System.out.println(
+            "protected Class<?> loadClass(String name, boolean resolve) {"
+        );
         System.out.println("    // 1. 检查是否已被加载");
         System.out.println("    Class<?> c = findLoadedClass(name);");
         System.out.println("    if (c == null) {");
@@ -178,11 +206,15 @@ public class ClassLoaderDemo {
         try {
             // 加载 String 类 - 应该由 Bootstrap 加载
             Class<?> stringClass = Class.forName("java.lang.String");
-            System.out.println("String 类加载器: " + stringClass.getClassLoader());
+            System.out.println(
+                "String 类加载器: " + stringClass.getClassLoader()
+            );
 
             // 加载我们自定义的类 - 应该由 AppClassLoader 加载
             Class<?> customClass = Class.forName("code.Parent");
-            System.out.println("Parent 类加载器: " + customClass.getClassLoader());
+            System.out.println(
+                "Parent 类加载器: " + customClass.getClassLoader()
+            );
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -217,7 +249,9 @@ public class ClassLoaderDemo {
 
             // 加载类
             Class<?> clazz = myLoader.loadClass("code.Parent");
-            System.out.println("由自定义类加载器加载: " + clazz.getClassLoader());
+            System.out.println(
+                "由自定义类加载器加载: " + clazz.getClassLoader()
+            );
 
             // 创建实例
             Object instance = clazz.getDeclaredConstructor().newInstance();
@@ -226,11 +260,13 @@ public class ClassLoaderDemo {
 
             // 验证是否为同一类
             System.out.println("\n【类加载器隔离性】");
-            System.out.println("系统加载的 == 自定义加载的: " +
-                (Parent.class == clazz)); // false ！不同的 Class 对象
+            System.out.println(
+                "系统加载的 == 自定义加载的: " + (Parent.class == clazz)
+            ); // false ！不同的 Class 对象
 
-            System.out.println("\n说明：同一个类被不同类加载器加载，在 JVM 中是不同的类");
-
+            System.out.println(
+                "\n说明：同一个类被不同类加载器加载，在 JVM 中是不同的类"
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -248,7 +284,9 @@ public class ClassLoaderDemo {
         System.out.println("【SPI（Service Provider Interface）】");
         System.out.println("- JDK 提供接口，厂商实现");
         System.out.println("- 例如：JDBC、JNDI、JAXP");
-        System.out.println("- Bootstrap ClassLoader 加载的类需要加载 App ClassLoader 的类");
+        System.out.println(
+            "- Bootstrap ClassLoader 加载的类需要加载 App ClassLoader 的类"
+        );
         System.out.println();
 
         System.out.println("【问题】");
@@ -258,14 +296,22 @@ public class ClassLoaderDemo {
         System.out.println();
 
         System.out.println("【解决方案：Thread Context ClassLoader】");
-        System.out.println("Thread.currentThread().setContextClassLoader(appClassLoader);");
-        System.out.println("ServiceLoader 使用当前线程的 ContextClassLoader 加载实现类");
+        System.out.println(
+            "Thread.currentThread().setContextClassLoader(appClassLoader);"
+        );
+        System.out.println(
+            "ServiceLoader 使用当前线程的 ContextClassLoader 加载实现类"
+        );
         System.out.println();
 
         System.out.println("【源码示例】java.sql.DriverManager");
-        System.out.println("// DriverManager 里通过 ContextClassLoader 加载驱动");
+        System.out.println(
+            "// DriverManager 里通过 ContextClassLoader 加载驱动"
+        );
         System.out.println("Class.forName(\"com.mysql.cj.jdbc.Driver\", true,");
-        System.out.println("    Thread.currentThread().getContextClassLoader());");
+        System.out.println(
+            "    Thread.currentThread().getContextClassLoader());"
+        );
         System.out.println();
 
         System.out.println("【其他打破双亲委派的场景】");
@@ -286,6 +332,7 @@ public class ClassLoaderDemo {
      * 自定义类加载器
      */
     static class MyClassLoader extends ClassLoader {
+
         private String name;
 
         public MyClassLoader(String name) {
@@ -293,7 +340,8 @@ public class ClassLoaderDemo {
         }
 
         @Override
-        protected Class<?> findClass(String name) throws ClassNotFoundException {
+        protected Class<?> findClass(String name)
+            throws ClassNotFoundException {
             System.out.println("  MyClassLoader.findClass() 被调用: " + name);
 
             // 这里应该从自定义路径加载，为了演示简化
@@ -304,7 +352,8 @@ public class ClassLoaderDemo {
         }
 
         @Override
-        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        protected Class<?> loadClass(String name, boolean resolve)
+            throws ClassNotFoundException {
             // 打破双亲委派：自定义类加载器优先自己加载
             // 但 java.lang.* 等核心包仍需委派，否则安全风险
 
@@ -343,6 +392,7 @@ public class ClassLoaderDemo {
      * 用于演示的类
      */
     static class Parent {
+
         // 验证准备阶段：static value 初始为 0
         // 初始化阶段：赋值为 10
         static int staticValue = 10;
@@ -351,7 +401,9 @@ public class ClassLoaderDemo {
         static final int CONST_VALUE = 100;
 
         static {
-            System.out.println("  Parent 类 <clinit>() 执行，staticValue = " + staticValue);
+            System.out.println(
+                "  Parent 类 <clinit>() 执行，staticValue = " + staticValue
+            );
             staticValue = 20; // 可以修改
         }
 

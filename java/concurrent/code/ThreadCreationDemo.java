@@ -1,5 +1,3 @@
-package code;
-
 import java.util.concurrent.*;
 
 /**
@@ -51,7 +49,9 @@ public class ThreadCreationDemo {
             @Override
             public void run() {
                 for (int i = 0; i < 3; i++) {
-                    System.out.println(getName() + " 运行第 " + (i + 1) + " 次");
+                    System.out.println(
+                        getName() + " 运行第 " + (i + 1) + " 次"
+                    );
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -74,7 +74,8 @@ public class ThreadCreationDemo {
     /**
      * 方式2：实现 Runnable 接口
      */
-    private static void method2_ImplementRunnable() throws InterruptedException {
+    private static void method2_ImplementRunnable()
+        throws InterruptedException {
         System.out.println("【方式2】实现 Runnable 接口");
         System.out.println("----------------------------------------");
 
@@ -84,8 +85,12 @@ public class ThreadCreationDemo {
         // 使用 Lambda 表达式创建 Runnable
         Runnable runnable2 = () -> {
             for (int i = 0; i < 3; i++) {
-                System.out.println(Thread.currentThread().getName() +
-                    " (Lambda) 运行第 " + (i + 1) + " 次");
+                System.out.println(
+                    Thread.currentThread().getName() +
+                        " (Lambda) 运行第 " +
+                        (i + 1) +
+                        " 次"
+                );
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -122,8 +127,13 @@ public class ThreadCreationDemo {
             int sum = 0;
             for (int i = 1; i <= 10; i++) {
                 sum += i;
-                System.out.println(Thread.currentThread().getName() +
-                    " (Lambda) 计算: 1+2+...+" + i + "=" + sum);
+                System.out.println(
+                    Thread.currentThread().getName() +
+                        " (Lambda) 计算: 1+2+...+" +
+                        i +
+                        "=" +
+                        sum
+                );
                 Thread.sleep(50);
             }
             return "Lambda计算完成，1到10的和为:" + sum;
@@ -156,8 +166,12 @@ public class ThreadCreationDemo {
         // 提交 Runnable 任务
         executor.execute(() -> {
             for (int i = 0; i < 3; i++) {
-                System.out.println(Thread.currentThread().getName() +
-                    " (Runnable任务) 执行第 " + (i + 1) + " 次");
+                System.out.println(
+                    Thread.currentThread().getName() +
+                        " (Runnable任务) 执行第 " +
+                        (i + 1) +
+                        " 次"
+                );
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -171,8 +185,13 @@ public class ThreadCreationDemo {
             int result = 1;
             for (int i = 1; i <= 5; i++) {
                 result *= i;
-                System.out.println(Thread.currentThread().getName() +
-                    " (Callable任务) 计算: " + i + "! = " + result);
+                System.out.println(
+                    Thread.currentThread().getName() +
+                        " (Callable任务) 计算: " +
+                        i +
+                        "! = " +
+                        result
+                );
                 Thread.sleep(50);
             }
             return result;
@@ -187,14 +206,18 @@ public class ThreadCreationDemo {
         }
 
         // 使用 CompletableFuture（Java 8+ 推荐）
-        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return "CompletableFuture 任务完成";
-        }, executor);
+        CompletableFuture<String> completableFuture =
+            CompletableFuture.supplyAsync(
+                () -> {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return "CompletableFuture 任务完成";
+                },
+                executor
+            );
 
         try {
             System.out.println("【返回结果】" + completableFuture.get());
@@ -213,6 +236,7 @@ public class ThreadCreationDemo {
  * 继承 Thread 类的实现
  */
 class MyThread extends Thread {
+
     public MyThread(String name) {
         super(name);
     }
@@ -234,6 +258,7 @@ class MyThread extends Thread {
  * 实现 Runnable 接口的实现
  */
 class MyRunnable implements Runnable {
+
     private String name;
 
     public MyRunnable(String name) {
@@ -243,8 +268,14 @@ class MyRunnable implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < 3; i++) {
-            System.out.println(Thread.currentThread().getName() +
-                " (" + name + ") 运行第 " + (i + 1) + " 次");
+            System.out.println(
+                Thread.currentThread().getName() +
+                    " (" +
+                    name +
+                    ") 运行第 " +
+                    (i + 1) +
+                    " 次"
+            );
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -258,6 +289,7 @@ class MyRunnable implements Runnable {
  * 实现 Callable 接口的实现（带返回值）
  */
 class MyCallable implements Callable<String> {
+
     private String name;
 
     public MyCallable(String name) {
@@ -269,8 +301,15 @@ class MyCallable implements Callable<String> {
         int sum = 0;
         for (int i = 1; i <= 10; i++) {
             sum += i;
-            System.out.println(Thread.currentThread().getName() +
-                " (" + name + ") 计算: 1+2+...+" + i + "=" + sum);
+            System.out.println(
+                Thread.currentThread().getName() +
+                    " (" +
+                    name +
+                    ") 计算: 1+2+...+" +
+                    i +
+                    "=" +
+                    sum
+            );
             Thread.sleep(50);
         }
         return name + " 计算完成，1到10的和为:" + sum;

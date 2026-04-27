@@ -1,5 +1,3 @@
-package code;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -75,7 +73,9 @@ public class StringImmutableDemo {
         System.out.println("str == upper: " + (str == upper));
 
         System.out.println("\n【核心结论】");
-        System.out.println("String 是不可变的：任何\"修改\"操作都返回新对象，原对象不变");
+        System.out.println(
+            "String 是不可变的：任何\"修改\"操作都返回新对象，原对象不变"
+        );
         System.out.println("String 的本质：final class + final byte[] value");
         System.out.println();
     }
@@ -106,7 +106,9 @@ public class StringImmutableDemo {
         // intern() 方法
         String s4 = s3.intern();
         System.out.println("\ns4 = s3.intern(): " + s4);
-        System.out.println("s1 == s4: " + (s1 == s4) + "（intern 返回常量池引用）");
+        System.out.println(
+            "s1 == s4: " + (s1 == s4) + "（intern 返回常量池引用）"
+        );
 
         // 常量池的性能优势
         System.out.println("\n【常量池优势】");
@@ -125,11 +127,16 @@ public class StringImmutableDemo {
 
         // 模拟数据库连接
         class DatabaseConnector {
+
             private String hostname;
             private String username;
             private String password;
 
-            public DatabaseConnector(String hostname, String username, String password) {
+            public DatabaseConnector(
+                String hostname,
+                String username,
+                String password
+            ) {
                 this.hostname = hostname;
                 this.username = username;
                 this.password = password;
@@ -138,7 +145,11 @@ public class StringImmutableDemo {
             public void connect() {
                 System.out.println("连接数据库: " + hostname);
                 System.out.println("用户名: " + username);
-                System.out.println("密码: " + password.substring(0, Math.min(3, password.length())) + "***");
+                System.out.println(
+                    "密码: " +
+                        password.substring(0, Math.min(3, password.length())) +
+                        "***"
+                );
             }
         }
 
@@ -151,7 +162,11 @@ public class StringImmutableDemo {
         System.out.println("密码 hashCode: " + password.hashCode());
 
         // 创建连接
-        DatabaseConnector connector = new DatabaseConnector(hostname, username, password);
+        DatabaseConnector connector = new DatabaseConnector(
+            hostname,
+            username,
+            password
+        );
         connector.connect();
 
         // 密码不可变，无法被恶意修改
@@ -184,7 +199,9 @@ public class StringImmutableDemo {
         int hash2 = str.hashCode();
         end = System.nanoTime();
         System.out.println("第二次 hashCode(): " + hash2);
-        System.out.println("耗时: " + (end - start) + " ns（从缓存读取，极快）");
+        System.out.println(
+            "耗时: " + (end - start) + " ns（从缓存读取，极快）"
+        );
 
         // String 的 hashCode 缓存原理
         System.out.println("\n【String hashCode 源码】");
@@ -217,8 +234,11 @@ public class StringImmutableDemo {
         Runnable task = () -> {
             for (int i = 0; i < 3; i++) {
                 // 这个操作创建新对象，不影响原字符串
-                String newStr = shared + "_" + Thread.currentThread().getName() + "_" + i;
-                System.out.println(Thread.currentThread().getName() + ": " + newStr);
+                String newStr =
+                    shared + "_" + Thread.currentThread().getName() + "_" + i;
+                System.out.println(
+                    Thread.currentThread().getName() + ": " + newStr
+                );
             }
         };
 
@@ -270,11 +290,17 @@ public class StringImmutableDemo {
 
         // 问题：找不到之前的元素了
         System.out.println("\n查找原 Key:");
-        System.out.println("contains(Key): " + set.contains(new StringBuilder("Key")) + "（找不到了！）");
+        System.out.println(
+            "contains(Key): " +
+                set.contains(new StringBuilder("Key")) +
+                "（找不到了！）"
+        );
 
         // 更严重的：内存泄漏风险
         System.out.println("\n【如果 String 可变会出现的问题】");
-        System.out.println("1. HashMap key 被修改后，hashCode 改变，找不到数据");
+        System.out.println(
+            "1. HashMap key 被修改后，hashCode 改变，找不到数据"
+        );
         System.out.println("2. 数据库密码被修改，连接被劫持");
         System.out.println("3. 字符串常量池中的值被修改，影响所有引用");
         System.out.println("4. hashCode 缓存失效，每次重新计算");
@@ -328,6 +354,7 @@ public class StringImmutableDemo {
      * 模拟的可变字符串类（用于演示问题）
      */
     static class MutableString {
+
         private char[] value;
 
         public MutableString(String str) {

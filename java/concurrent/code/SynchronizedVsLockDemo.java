@@ -1,5 +1,3 @@
-package code;
-
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -61,14 +59,20 @@ public class SynchronizedVsLockDemo {
         SynchronizedResource resource = new SynchronizedResource();
 
         // 线程1：调用同步方法
-        Thread t1 = new Thread(() -> {
-            resource.synchronizedMethod("Thread-A");
-        }, "Thread-A");
+        Thread t1 = new Thread(
+            () -> {
+                resource.synchronizedMethod("Thread-A");
+            },
+            "Thread-A"
+        );
 
         // 线程2：调用同步代码块
-        Thread t2 = new Thread(() -> {
-            resource.synchronizedBlock("Thread-B");
-        }, "Thread-B");
+        Thread t2 = new Thread(
+            () -> {
+                resource.synchronizedBlock("Thread-B");
+            },
+            "Thread-B"
+        );
 
         t1.start();
         t2.start();
@@ -94,13 +98,19 @@ public class SynchronizedVsLockDemo {
 
         LockResource resource = new LockResource();
 
-        Thread t1 = new Thread(() -> {
-            resource.lockMethod("Thread-A");
-        }, "Thread-A");
+        Thread t1 = new Thread(
+            () -> {
+                resource.lockMethod("Thread-A");
+            },
+            "Thread-A"
+        );
 
-        Thread t2 = new Thread(() -> {
-            resource.lockMethod("Thread-B");
-        }, "Thread-B");
+        Thread t2 = new Thread(
+            () -> {
+                resource.lockMethod("Thread-B");
+            },
+            "Thread-B"
+        );
 
         t1.start();
         t2.start();
@@ -121,7 +131,8 @@ public class SynchronizedVsLockDemo {
      * 3. lockInterruptibly(): 可响应中断的锁获取
      * 4. 公平锁
      */
-    private static void demonstrateAdvancedLockFeatures() throws InterruptedException {
+    private static void demonstrateAdvancedLockFeatures()
+        throws InterruptedException {
         System.out.println("【演示3】Lock 高级特性（可中断、超时、公平锁）");
         System.out.println("----------------------------------------");
 
@@ -146,8 +157,8 @@ public class SynchronizedVsLockDemo {
             System.out.println("   线程1获取锁，持有5秒...");
             try {
                 Thread.sleep(5000);
-            } catch (InterruptedException e) {}
-            finally {
+            } catch (InterruptedException e) {
+            } finally {
                 timeoutLock.unlock();
                 System.out.println("   线程1释放锁");
             }
@@ -219,7 +230,9 @@ public class SynchronizedVsLockDemo {
 
         // 4. 公平锁
         System.out.println("\n4. 公平锁 vs 非公平锁：");
-        System.out.println("   公平锁：按照请求锁的顺序获取（new ReentrantLock(true)）");
+        System.out.println(
+            "   公平锁：按照请求锁的顺序获取（new ReentrantLock(true)）"
+        );
         System.out.println("   非公平锁：允许插队（默认，效率高）");
         System.out.println();
     }
@@ -290,27 +303,33 @@ public class SynchronizedVsLockDemo {
 
         System.out.println("使用 Condition 实现生产者-消费者（多条件队列）：");
 
-        Thread producer = new Thread(() -> {
-            for (int i = 0; i < 5; i++) {
-                resource.produce("Item-" + i);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        Thread producer = new Thread(
+            () -> {
+                for (int i = 0; i < 5; i++) {
+                    resource.produce("Item-" + i);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }, "Producer");
+            },
+            "Producer"
+        );
 
-        Thread consumer = new Thread(() -> {
-            for (int i = 0; i < 5; i++) {
-                resource.consume();
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        Thread consumer = new Thread(
+            () -> {
+                for (int i = 0; i < 5; i++) {
+                    resource.consume();
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }, "Consumer");
+            },
+            "Consumer"
+        );
 
         producer.start();
         consumer.start();
@@ -392,16 +411,26 @@ public class SynchronizedVsLockDemo {
         long time2 = System.currentTimeMillis() - start2;
         executor2.shutdown();
 
-        System.out.println("线程数: " + threads + ", 每个线程操作: " + (count / threads) + " 次");
+        System.out.println(
+            "线程数: " +
+                threads +
+                ", 每个线程操作: " +
+                (count / threads) +
+                " 次"
+        );
         System.out.println("synchronized 耗时: " + time1 + " ms");
         System.out.println("ReentrantLock 耗时: " + time2 + " ms");
-        System.out.println((time1 <= time2 ? "synchronized" : "Lock") + " 在本环境下更快");
+        System.out.println(
+            (time1 <= time2 ? "synchronized" : "Lock") + " 在本环境下更快"
+        );
 
         System.out.println("\n性能结论：");
         System.out.println(" - JDK6+ synchronized 经过优化，与 Lock 性能接近");
         System.out.println(" - 低竞争：两者性能相当");
         System.out.println(" - 高竞争：Lock 略优（可选择策略）");
-        System.out.println(" - 无竞争：synchronized 有锁升级优势（偏向锁->轻量级锁）");
+        System.out.println(
+            " - 无竞争：synchronized 有锁升级优势（偏向锁->轻量级锁）"
+        );
         System.out.println();
     }
 
@@ -411,13 +440,16 @@ public class SynchronizedVsLockDemo {
      * synchronized 资源类
      */
     static class SynchronizedResource {
+
         private int count = 0;
 
         // 同步方法（锁是 this）
         public synchronized void synchronizedMethod(String threadName) {
             System.out.println("   " + threadName + " 进入同步方法");
             count++;
-            System.out.println("   " + threadName + " count=" + count + "，即将离开同步方法");
+            System.out.println(
+                "   " + threadName + " count=" + count + "，即将离开同步方法"
+            );
         }
 
         // 同步代码块（可指定锁对象）
@@ -425,7 +457,13 @@ public class SynchronizedVsLockDemo {
             synchronized (this) {
                 System.out.println("   " + threadName + " 进入同步代码块");
                 count++;
-                System.out.println("   " + threadName + " count=" + count + "，即将离开同步代码块");
+                System.out.println(
+                    "   " +
+                        threadName +
+                        " count=" +
+                        count +
+                        "，即将离开同步代码块"
+                );
             }
         }
     }
@@ -434,6 +472,7 @@ public class SynchronizedVsLockDemo {
      * Lock 资源类
      */
     static class LockResource {
+
         private final Lock lock = new ReentrantLock();
         private int count = 0;
 
@@ -456,6 +495,7 @@ public class SynchronizedVsLockDemo {
      * 读写锁资源类
      */
     static class ReadWriteLockResource {
+
         private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
         private final Lock readLock = rwLock.readLock();
         private final Lock writeLock = rwLock.writeLock();
@@ -464,7 +504,9 @@ public class SynchronizedVsLockDemo {
         public void read(String readerName) {
             readLock.lock();
             try {
-                System.out.println("   " + readerName + " 获取读锁，读取数据: " + data);
+                System.out.println(
+                    "   " + readerName + " 获取读锁，读取数据: " + data
+                );
                 Thread.sleep(500); // 模拟读取耗时
                 System.out.println("   " + readerName + " 释放读锁");
             } catch (InterruptedException e) {
@@ -477,7 +519,9 @@ public class SynchronizedVsLockDemo {
         public void write(String writerName, String newValue) {
             writeLock.lock();
             try {
-                System.out.println("   " + writerName + " 获取写锁，准备写入: " + newValue);
+                System.out.println(
+                    "   " + writerName + " 获取写锁，准备写入: " + newValue
+                );
                 Thread.sleep(1000); // 模拟写入耗时
                 data = newValue;
                 System.out.println("   " + writerName + " 写入完成，释放写锁");
@@ -493,9 +537,10 @@ public class SynchronizedVsLockDemo {
      * Condition 资源类（生产者-消费者模式）
      */
     static class ConditionResource {
+
         private final Lock lock = new ReentrantLock();
-        private final Condition notFull = lock.newCondition();   // 队列不满条件
-        private final Condition notEmpty = lock.newCondition();  // 队列不空条件
+        private final Condition notFull = lock.newCondition(); // 队列不满条件
+        private final Condition notEmpty = lock.newCondition(); // 队列不空条件
         private final Queue<String> queue = new LinkedList<>();
         private final int capacity = 3;
 
@@ -508,7 +553,9 @@ public class SynchronizedVsLockDemo {
                     notFull.await();
                 }
                 queue.offer(item);
-                System.out.println("   生产: " + item + "，队列大小: " + queue.size());
+                System.out.println(
+                    "   生产: " + item + "，队列大小: " + queue.size()
+                );
                 // 通知消费者可以消费
                 notEmpty.signal();
             } catch (InterruptedException e) {
@@ -527,7 +574,9 @@ public class SynchronizedVsLockDemo {
                     notEmpty.await();
                 }
                 String item = queue.poll();
-                System.out.println("   消费: " + item + "，队列大小: " + queue.size());
+                System.out.println(
+                    "   消费: " + item + "，队列大小: " + queue.size()
+                );
                 // 通知生产者可以继续生产
                 notFull.signal();
                 return item;

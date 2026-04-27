@@ -1,5 +1,3 @@
-package code;
-
 import java.util.*;
 
 /**
@@ -61,16 +59,26 @@ public class EqualsHashCodeDemo {
         Person p2 = new Person("Alice", 25);
         System.out.println("\n2. 引用类型 (Person):");
         System.out.println("   p1 == p2: " + (p1 == p2) + "  // 比较内存地址");
-        System.out.println("   p1.equals(p2): " + p1.equals(p2) + "  // 比较内容（未重写时同==）");
+        System.out.println(
+            "   p1.equals(p2): " +
+                p1.equals(p2) +
+                "  // 比较内容（未重写时同==）"
+        );
 
         // 3. String 的坑
         String s1 = "hello";
         String s2 = "hello";
         String s3 = new String("hello");
         System.out.println("\n3. String 的特殊性：");
-        System.out.println("   s1 == s2: " + (s1 == s2) + "  // true（字符串常量池）");
-        System.out.println("   s1 == s3: " + (s1 == s3) + "  // false（不同对象）");
-        System.out.println("   s1.equals(s3): " + s1.equals(s3) + "  // true（内容相同）");
+        System.out.println(
+            "   s1 == s2: " + (s1 == s2) + "  // true（字符串常量池）"
+        );
+        System.out.println(
+            "   s1 == s3: " + (s1 == s3) + "  // false（不同对象）"
+        );
+        System.out.println(
+            "   s1.equals(s3): " + s1.equals(s3) + "  // true（内容相同）"
+        );
 
         // 4. Integer 的缓存陷阱
         Integer i1 = 127;
@@ -78,9 +86,15 @@ public class EqualsHashCodeDemo {
         Integer i3 = 128;
         Integer i4 = 128;
         System.out.println("\n4. Integer 的缓存陷阱：");
-        System.out.println("   i1 == i2 (127): " + (i1 == i2) + "  // true（缓存 -128~127）");
-        System.out.println("   i3 == i4 (128): " + (i3 == i4) + "  // false（超出缓存范围）");
-        System.out.println("   i3.equals(i4): " + i3.equals(i4) + "  // true（内容相等）");
+        System.out.println(
+            "   i1 == i2 (127): " + (i1 == i2) + "  // true（缓存 -128~127）"
+        );
+        System.out.println(
+            "   i3 == i4 (128): " + (i3 == i4) + "  // false（超出缓存范围）"
+        );
+        System.out.println(
+            "   i3.equals(i4): " + i3.equals(i4) + "  // true（内容相等）"
+        );
 
         System.out.println("\n【核心区别总结】");
         System.out.println(" == 比较的是内存地址（基本类型比较值）");
@@ -114,7 +128,9 @@ public class EqualsHashCodeDemo {
         System.out.println("   ✓ 检查通过: " + (xy == yx));
 
         // 3. 传递性
-        System.out.println("\n3. 传递性：若 x.equals(y)且 y.equals(z)，则 x.equals(z)");
+        System.out.println(
+            "\n3. 传递性：若 x.equals(y)且 y.equals(z)，则 x.equals(z)"
+        );
         PersonWithEquals p4 = new PersonWithEquals("Alice", 25);
         boolean c1 = p1.equals(p2);
         boolean c2 = p2.equals(p4);
@@ -149,9 +165,18 @@ public class EqualsHashCodeDemo {
         System.out.println("【演示3】hashCode 的两大契约");
         System.out.println("----------------------------------------");
 
-        PersonWithEqualsAndHashCode p1 = new PersonWithEqualsAndHashCode("Alice", 25);
-        PersonWithEqualsAndHashCode p2 = new PersonWithEqualsAndHashCode("Alice", 25);
-        PersonWithEqualsAndHashCode p3 = new PersonWithEqualsAndHashCode("Bob", 30);
+        PersonWithEqualsAndHashCode p1 = new PersonWithEqualsAndHashCode(
+            "Alice",
+            25
+        );
+        PersonWithEqualsAndHashCode p2 = new PersonWithEqualsAndHashCode(
+            "Alice",
+            25
+        );
+        PersonWithEqualsAndHashCode p3 = new PersonWithEqualsAndHashCode(
+            "Bob",
+            30
+        );
 
         int hash1 = p1.hashCode();
         int hash2 = p2.hashCode();
@@ -162,16 +187,26 @@ public class EqualsHashCodeDemo {
         System.out.println("p3 = Bob,30, hashCode = " + hash3);
 
         // 契约1：相等对象必有相同 hashCode
-        System.out.println("\n契约1：若 x.equals(y)，则 x.hashCode() == y.hashCode()");
+        System.out.println(
+            "\n契约1：若 x.equals(y)，则 x.hashCode() == y.hashCode()"
+        );
         System.out.println("   p1.equals(p2): " + p1.equals(p2));
-        System.out.println("   p1.hashCode() == p2.hashCode(): " + (hash1 == hash2));
+        System.out.println(
+            "   p1.hashCode() == p2.hashCode(): " + (hash1 == hash2)
+        );
         System.out.println("   ✓ 检查通过");
 
         // 契约2：不相等对象 hashCode 可以相同（碰撞）
-        System.out.println("\n契约2：若 !x.equals(y)，x.hashCode() 可以与 y.hashCode() 相同");
+        System.out.println(
+            "\n契约2：若 !x.equals(y)，x.hashCode() 可以与 y.hashCode() 相同"
+        );
         System.out.println("   p1.equals(p3): " + p1.equals(p3));
-        System.out.println("   p1.hashCode() == p3.hashCode(): " + (hash1 == hash3));
-        System.out.println("   说明：hashCode 相同不代表 equals 相同（哈希碰撞）");
+        System.out.println(
+            "   p1.hashCode() == p3.hashCode(): " + (hash1 == hash3)
+        );
+        System.out.println(
+            "   说明：hashCode 相同不代表 equals 相同（哈希碰撞）"
+        );
 
         // 演示哈希碰撞
         System.out.println("\n【哈希碰撞演示】");
@@ -198,7 +233,9 @@ public class EqualsHashCodeDemo {
         Set<String> set = new HashSet<>();
         set.add(s1);
         set.add(s2);
-        System.out.println("   HashSet 大小 = " + set.size() + "（可以存储两个元素）");
+        System.out.println(
+            "   HashSet 大小 = " + set.size() + "（可以存储两个元素）"
+        );
     }
 
     /**
@@ -215,9 +252,19 @@ public class EqualsHashCodeDemo {
         System.out.println("p1 = Alice,25");
         System.out.println("p2 = Alice,25");
         System.out.println("p1.equals(p2): " + p1.equals(p2));
-        System.out.println("p1.hashCode(): " + p1.hashCode() + " (默认Object的hashCode，基于地址)");
-        System.out.println("p2.hashCode(): " + p2.hashCode() + " (默认Object的hashCode，基于地址)");
-        System.out.println("hashCode 相同: " + (p1.hashCode() == p2.hashCode()));
+        System.out.println(
+            "p1.hashCode(): " +
+                p1.hashCode() +
+                " (默认Object的hashCode，基于地址)"
+        );
+        System.out.println(
+            "p2.hashCode(): " +
+                p2.hashCode() +
+                " (默认Object的hashCode，基于地址)"
+        );
+        System.out.println(
+            "hashCode 相同: " + (p1.hashCode() == p2.hashCode())
+        );
 
         // 在 HashMap 中测试
         System.out.println("\n测试在 HashMap 中的行为：");
@@ -227,15 +274,23 @@ public class EqualsHashCodeDemo {
 
         System.out.println("put(p1, \"Person 1\")");
         System.out.println("put(p2, \"Person 2\")");
-        System.out.println("map.size(): " + map.size() + " (预期应该是 1，但实际是 2)！");
+        System.out.println(
+            "map.size(): " + map.size() + " (预期应该是 1，但实际是 2)！"
+        );
         System.out.println("map.get(p1): " + map.get(p1));
         System.out.println("map.get(p2): " + map.get(p2));
 
         if (map.size() == 2) {
             System.out.println("\n❌ 出问题了！");
-            System.out.println("   原因：p1 和 p2 的 hashCode 不同（默认是 Object 基于地址）");
-            System.out.println("   它们被放入了 HashMap 的不同桶（index = hash & (n-1)）");
-            System.out.println("   虽然 equals 相同，但 HashMap 根据 hashCode 找桶，找错了位置");
+            System.out.println(
+                "   原因：p1 和 p2 的 hashCode 不同（默认是 Object 基于地址）"
+            );
+            System.out.println(
+                "   它们被放入了 HashMap 的不同桶（index = hash & (n-1)）"
+            );
+            System.out.println(
+                "   虽然 equals 相同，但 HashMap 根据 hashCode 找桶，找错了位置"
+            );
         }
 
         System.out.println("\n对比正确实现：");
@@ -244,8 +299,12 @@ public class EqualsHashCodeDemo {
         Map<PersonWithBoth, String> map2 = new HashMap<>();
         map2.put(p3, "Person 3");
         map2.put(p4, "Person 4");
-        System.out.println("正确实现 map.size(): " + map2.size() + " (正确是 1)");
-        System.out.println("因为 equals 相同且 hashCode 相同，所以认为是同一个 key");
+        System.out.println(
+            "正确实现 map.size(): " + map2.size() + " (正确是 1)"
+        );
+        System.out.println(
+            "因为 equals 相同且 hashCode 相同，所以认为是同一个 key"
+        );
         System.out.println();
     }
 
@@ -268,7 +327,9 @@ public class EqualsHashCodeDemo {
         System.out.println("   p1.equals(p2): " + p1.equals(p2));
         System.out.println("   p1.hashCode(): " + p1.hashCode());
         System.out.println("   p2.hashCode(): " + p2.hashCode());
-        System.out.println("   hashCode 相同: " + (p1.hashCode() == p2.hashCode()));
+        System.out.println(
+            "   hashCode 相同: " + (p1.hashCode() == p2.hashCode())
+        );
 
         // HashMap 测试
         Map<ProperPerson, String> map = new HashMap<>();
@@ -280,11 +341,15 @@ public class EqualsHashCodeDemo {
         System.out.println("   ✓ 正确工作！");
 
         // 使用 Objects 工具类简化
-        System.out.println("\n【JDK 7+ 推荐写法】使用 Objects.equals 和 Objects.hash");
+        System.out.println(
+            "\n【JDK 7+ 推荐写法】使用 Objects.equals 和 Objects.hash"
+        );
         System.out.println("   @Override");
         System.out.println("   public boolean equals(Object o) {");
         System.out.println("       if (this == o) return true;");
-        System.out.println("       if (o == null || getClass() != o.getClass()) return false;");
+        System.out.println(
+            "       if (o == null || getClass() != o.getClass()) return false;"
+        );
         System.out.println("       ProperPerson that = (ProperPerson) o;");
         System.out.println("       return age == that.age &&");
         System.out.println("              Objects.equals(name, that.name);");
@@ -308,10 +373,14 @@ public class EqualsHashCodeDemo {
         System.out.println("❌ 错误1：使用 getClass() 还是 instanceof？");
         System.out.println("   使用 getClass()：必须严格同类型");
         System.out.println("   instanceof：允许子类（可能破坏对称性）");
-        System.out.println("   推荐 final 类用 instanceof，非 final 类用 getClass()");
+        System.out.println(
+            "   推荐 final 类用 instanceof，非 final 类用 getClass()"
+        );
 
         System.out.println("\n❌ 错误2：equals 参数类型错误");
-        System.out.println("   // 错误：public boolean equals(Person o) - 这是重载，不是重写！");
+        System.out.println(
+            "   // 错误：public boolean equals(Person o) - 这是重载，不是重写！"
+        );
         System.out.println("   // 正确：public boolean equals(Object o)");
 
         System.out.println("\n❌ 错误3：在 equals 中修改对象状态");
@@ -321,7 +390,9 @@ public class EqualsHashCodeDemo {
         System.out.println("   Double.compare(double1, double2) 而不是 ==");
 
         System.out.println("\n❌ 错误5：包含可变对象的 hashCode");
-        System.out.println("   如果对象放入 HashSet/HashMap 后修改了参与 hashCode 计算的字段");
+        System.out.println(
+            "   如果对象放入 HashSet/HashMap 后修改了参与 hashCode 计算的字段"
+        );
         System.out.println("   会导致无法找到该对象！");
 
         // 可变字段的坑
@@ -337,7 +408,9 @@ public class EqualsHashCodeDemo {
         mp.name = "Bob";
         System.out.println("\n修改 person.name = \"Bob\"");
         System.out.println("修改后 HashSet 大小: " + set.size());
-        System.out.println("contains(person): " + set.contains(mp) + " ❌ 找不到了！");
+        System.out.println(
+            "contains(person): " + set.contains(mp) + " ❌ 找不到了！"
+        );
         System.out.println("原因：修改后 hashCode 变了，去错误的桶找，找不到");
 
         System.out.println("\n【最佳实践】");
@@ -354,6 +427,7 @@ public class EqualsHashCodeDemo {
      * 基础 Person 类（未重写 equals）
      */
     static class Person {
+
         String name;
         int age;
 
@@ -367,6 +441,7 @@ public class EqualsHashCodeDemo {
      * 只重写了 equals 的 Person
      */
     static class PersonWithEquals {
+
         String name;
         int age;
 
@@ -388,6 +463,7 @@ public class EqualsHashCodeDemo {
      * 重写了 equals 和 hashCode 的 Person
      */
     static class PersonWithEqualsAndHashCode {
+
         String name;
         int age;
 
@@ -414,6 +490,7 @@ public class EqualsHashCodeDemo {
      * 只重写 equals 不重写 hashCode（演示用）
      */
     static class PersonWithEqualsOnly {
+
         String name;
         int age;
 
@@ -436,6 +513,7 @@ public class EqualsHashCodeDemo {
      * 正确实现的 Person（示范）
      */
     static class PersonWithBoth {
+
         String name;
         int age;
 
@@ -462,7 +540,8 @@ public class EqualsHashCodeDemo {
      * 正确完整的实现（推荐）
      */
     static class ProperPerson {
-        private final String name;  // 使用 final 确保不可变
+
+        private final String name; // 使用 final 确保不可变
         private final int age;
         private final String email;
 
@@ -485,9 +564,11 @@ public class EqualsHashCodeDemo {
 
             // 4. 向下转型并比较字段
             ProperPerson that = (ProperPerson) o;
-            return age == that.age &&
-                    Objects.equals(name, that.name) &&
-                    Objects.equals(email, that.email);
+            return (
+                age == that.age &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(email, that.email)
+            );
         }
 
         @Override
@@ -498,11 +579,18 @@ public class EqualsHashCodeDemo {
 
         @Override
         public String toString() {
-            return "ProperPerson{" +
-                    "name='" + name + '\'' +
-                    ", age=" + age +
-                    ", email='" + email + '\'' +
-                    '}';
+            return (
+                "ProperPerson{" +
+                "name='" +
+                name +
+                '\'' +
+                ", age=" +
+                age +
+                ", email='" +
+                email +
+                '\'' +
+                '}'
+            );
         }
     }
 
@@ -510,7 +598,8 @@ public class EqualsHashCodeDemo {
      * 可变 Person（演示 hashCode 陷阱）
      */
     static class MutablePerson {
-        String name;  // 非 final，可变
+
+        String name; // 非 final，可变
         int age;
 
         MutablePerson(String name, int age) {
@@ -528,7 +617,7 @@ public class EqualsHashCodeDemo {
 
         @Override
         public int hashCode() {
-            return Objects.hash(name, age);  // 基于可变字段
+            return Objects.hash(name, age); // 基于可变字段
         }
     }
 }

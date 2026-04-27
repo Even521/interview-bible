@@ -1,5 +1,3 @@
-package code;
-
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
@@ -35,8 +33,13 @@ public class OnlineTroubleshootingDemo {
         System.out.println("线上问题排查演示程序");
         System.out.println("========================================");
         System.out.println("PID: " + ProcessHandle.current().pid());
-        System.out.println("使用 jstack " + ProcessHandle.current().pid() + " 查看线程堆栈");
-        System.out.println("使用 Arthas: java -jar arthas-boot.jar " + ProcessHandle.current().pid());
+        System.out.println(
+            "使用 jstack " + ProcessHandle.current().pid() + " 查看线程堆栈"
+        );
+        System.out.println(
+            "使用 Arthas: java -jar arthas-boot.jar " +
+                ProcessHandle.current().pid()
+        );
         System.out.println();
 
         OnlineTroubleshootingDemo demo = new OnlineTroubleshootingDemo();
@@ -106,22 +109,29 @@ public class OnlineTroubleshootingDemo {
         System.out.println("【场景1】启动死循环线程，CPU将飙升...");
         System.out.println("线程名: DeadLoopThread");
 
-        Thread deadLoopThread = new Thread(() -> {
-            long count = 0;
-            while (running) {
-                // 死循环，无终止条件
-                count++;
-                if (count % 1000000000 == 0) {
-                    System.out.println("死循环计数: " + count);
+        Thread deadLoopThread = new Thread(
+            () -> {
+                long count = 0;
+                while (running) {
+                    // 死循环，无终止条件
+                    count++;
+                    if (count % 1000000000 == 0) {
+                        System.out.println("死循环计数: " + count);
+                    }
                 }
-            }
-        }, "DeadLoopThread");
+            },
+            "DeadLoopThread"
+        );
 
         deadLoopThread.setDaemon(true);
         deadLoopThread.start();
 
         System.out.println("死循环线程已启动！");
-        System.out.println("排查命令：jstack " + ProcessHandle.current().pid() + " | grep -A 20 DeadLoopThread");
+        System.out.println(
+            "排查命令：jstack " +
+                ProcessHandle.current().pid() +
+                " | grep -A 20 DeadLoopThread"
+        );
     }
 
     /**
@@ -131,19 +141,24 @@ public class OnlineTroubleshootingDemo {
         System.out.println("【场景2】启动正则回溯线程...");
         System.out.println("线程名: RegexThread");
 
-        Thread regexThread = new Thread(() -> {
-            // 灾难性回溯的正则：对长字符串匹配困难
-            String regex = "(a+)+b";
-            String input = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac";
+        Thread regexThread = new Thread(
+            () -> {
+                // 灾难性回溯的正则：对长字符串匹配困难
+                String regex = "(a+)+b";
+                String input = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac";
 
-            try {
-                System.out.println("尝试匹配长字符串，这将导致灾难性回溯...");
-                boolean matches = Pattern.matches(regex, input);
-                System.out.println("匹配结果: " + matches);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, "RegexThread");
+                try {
+                    System.out.println(
+                        "尝试匹配长字符串，这将导致灾难性回溯..."
+                    );
+                    boolean matches = Pattern.matches(regex, input);
+                    System.out.println("匹配结果: " + matches);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            },
+            "RegexThread"
+        );
 
         regexThread.setDaemon(true);
         regexThread.start();
@@ -158,19 +173,22 @@ public class OnlineTroubleshootingDemo {
         System.out.println("【场景3】启动密集计算线程...");
         System.out.println("线程名: CalculationThread");
 
-        Thread calcThread = new Thread(() -> {
-            Random random = new Random();
-            while (running) {
-                // 大量数学计算
-                double result = 0;
-                for (int i = 0; i < 10000000; i++) {
-                    result += Math.sin(i) * Math.cos(i) + Math.sqrt(i + 1);
+        Thread calcThread = new Thread(
+            () -> {
+                Random random = new Random();
+                while (running) {
+                    // 大量数学计算
+                    double result = 0;
+                    for (int i = 0; i < 10000000; i++) {
+                        result += Math.sin(i) * Math.cos(i) + Math.sqrt(i + 1);
+                    }
+                    if (random.nextInt(100) == 0) {
+                        System.out.println("计算结果: " + result);
+                    }
                 }
-                if (random.nextInt(100) == 0) {
-                    System.out.println("计算结果: " + result);
-                }
-            }
-        }, "CalculationThread");
+            },
+            "CalculationThread"
+        );
 
         calcThread.setDaemon(true);
         calcThread.start();
@@ -186,30 +204,44 @@ public class OnlineTroubleshootingDemo {
         System.out.println("【场景4】启动内存泄漏（静态集合）...");
         System.out.println("线程名: MemoryLeakThread");
 
-        Thread leakThread = new Thread(() -> {
-            int count = 0;
-            while (running && count < 1000) {
-                // 不断往静态集合添加大对象，永不释放
-                byte[] data = new byte[1024 * 1024]; // 1MB
-                MEMORY_LEAK_LIST.add(data);
-                count++;
+        Thread leakThread = new Thread(
+            () -> {
+                int count = 0;
+                while (running && count < 1000) {
+                    // 不断往静态集合添加大对象，永不释放
+                    byte[] data = new byte[1024 * 1024]; // 1MB
+                    MEMORY_LEAK_LIST.add(data);
+                    count++;
 
-                System.out.println("已泄漏内存: " + count + " MB，集合大小: " + MEMORY_LEAK_LIST.size());
+                    System.out.println(
+                        "已泄漏内存: " +
+                            count +
+                            " MB，集合大小: " +
+                            MEMORY_LEAK_LIST.size()
+                    );
 
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            System.out.println("内存泄漏演示完成（已添加 " + count + " MB到静态集合）");
-        }, "MemoryLeakThread");
+                System.out.println(
+                    "内存泄漏演示完成（已添加 " + count + " MB到静态集合）"
+                );
+            },
+            "MemoryLeakThread"
+        );
 
         leakThread.setDaemon(true);
         leakThread.start();
 
         System.out.println("内存泄漏线程已启动！");
-        System.out.println("排查命令：jmap -histo " + ProcessHandle.current().pid() + " | head -20");
+        System.out.println(
+            "排查命令：jmap -histo " +
+                ProcessHandle.current().pid() +
+                " | head -20"
+        );
     }
 
     /**
@@ -239,13 +271,17 @@ public class OnlineTroubleshootingDemo {
                 // 在线程池场景下，线程复用会导致内存泄漏
 
                 if (taskId % 10 == 0) {
-                    System.out.println("Task-" + taskId + " 完成，但未remove ThreadLocal！");
+                    System.out.println(
+                        "Task-" + taskId + " 完成，但未remove ThreadLocal！"
+                    );
                 }
             });
         }
 
         executor.shutdown();
-        System.out.println("ThreadLocal泄漏场景已启动（100个任务提交到线程池）");
+        System.out.println(
+            "ThreadLocal泄漏场景已启动（100个任务提交到线程池）"
+        );
         System.out.println("问题：线程池线程复用，ThreadLocal未remove导致泄漏");
     }
 
@@ -259,41 +295,51 @@ public class OnlineTroubleshootingDemo {
         final Object lockA = new Object();
         final Object lockB = new Object();
 
-        Thread thread1 = new Thread(() -> {
-            synchronized (lockA) {
-                System.out.println("线程1：持有lockA");
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("线程1：尝试获取lockB...");
-                synchronized (lockB) {
-                    System.out.println("线程1：获取lockB成功");
-                }
-            }
-        }, "DeadlockThread-1");
-
-        Thread thread2 = new Thread(() -> {
-            synchronized (lockB) {
-                System.out.println("线程2：持有lockB");
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("线程2：尝试获取lockA...");
+        Thread thread1 = new Thread(
+            () -> {
                 synchronized (lockA) {
-                    System.out.println("线程2：获取lockA成功");
+                    System.out.println("线程1：持有lockA");
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("线程1：尝试获取lockB...");
+                    synchronized (lockB) {
+                        System.out.println("线程1：获取lockB成功");
+                    }
                 }
-            }
-        }, "DeadlockThread-2");
+            },
+            "DeadlockThread-1"
+        );
+
+        Thread thread2 = new Thread(
+            () -> {
+                synchronized (lockB) {
+                    System.out.println("线程2：持有lockB");
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("线程2：尝试获取lockA...");
+                    synchronized (lockA) {
+                        System.out.println("线程2：获取lockA成功");
+                    }
+                }
+            },
+            "DeadlockThread-2"
+        );
 
         thread1.start();
         thread2.start();
 
         System.out.println("死锁线程已启动！");
-        System.out.println("排查命令：jstack -l " + ProcessHandle.current().pid() + " | grep -A 50 deadlock");
+        System.out.println(
+            "排查命令：jstack -l " +
+                ProcessHandle.current().pid() +
+                " | grep -A 50 deadlock"
+        );
     }
 
     /**
@@ -303,38 +349,43 @@ public class OnlineTroubleshootingDemo {
         System.out.println("【场景7】启动Full GC压力测试...");
         System.out.println("线程名: GCPressureThread");
 
-        Thread gcThread = new Thread(() -> {
-            List<Object> list = new ArrayList<>();
+        Thread gcThread = new Thread(
+            () -> {
+                List<Object> list = new ArrayList<>();
 
-            while (running) {
-                // 快速创建大量临时对象
-                for (int i = 0; i < 100000; i++) {
-                    list.add(new byte[100]); // 小对象快速进入Eden
+                while (running) {
+                    // 快速创建大量临时对象
+                    for (int i = 0; i < 100000; i++) {
+                        list.add(new byte[100]); // 小对象快速进入Eden
+                    }
+
+                    // 只保留最后一个引用，让前面99%成为垃圾
+                    if (!list.isEmpty()) {
+                        Object last = list.get(list.size() - 1);
+                        list.clear();
+                        list.add(last);
+                    }
+
+                    // 触发GC
+                    System.gc();
+
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                // 只保留最后一个引用，让前面99%成为垃圾
-                if (!list.isEmpty()) {
-                    Object last = list.get(list.size() - 1);
-                    list.clear();
-                    list.add(last);
-                }
-
-                // 触发GC
-                System.gc();
-
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, "GCPressureThread");
+            },
+            "GCPressureThread"
+        );
 
         gcThread.setDaemon(true);
         gcThread.start();
 
         System.out.println("GC压力线程已启动！");
-        System.out.println("监控命令：jstat -gc " + ProcessHandle.current().pid() + " 1000");
+        System.out.println(
+            "监控命令：jstat -gc " + ProcessHandle.current().pid() + " 1000"
+        );
     }
 
     /**
@@ -345,23 +396,31 @@ public class OnlineTroubleshootingDemo {
         System.out.println("【场景8】启动正常的后台业务线程...");
 
         // 启动多个模拟业务线程
-        String[] threadNames = {"OrderProcessor", "PaymentHandler", "InventoryChecker", "ReportGenerator"};
+        String[] threadNames = {
+            "OrderProcessor",
+            "PaymentHandler",
+            "InventoryChecker",
+            "ReportGenerator",
+        };
 
         for (String name : threadNames) {
-            Thread thread = new Thread(() -> {
-                Random random = new Random();
-                while (running) {
-                    try {
-                        // 模拟业务处理
-                        simulateBusinessLogic(name);
+            Thread thread = new Thread(
+                () -> {
+                    Random random = new Random();
+                    while (running) {
+                        try {
+                            // 模拟业务处理
+                            simulateBusinessLogic(name);
 
-                        // 随机休眠
-                        Thread.sleep(random.nextInt(1000) + 500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                            // 随机休眠
+                            Thread.sleep(random.nextInt(1000) + 500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            }, name);
+                },
+                name
+            );
             thread.setDaemon(true);
             thread.start();
             System.out.println("启动线程: " + name);
@@ -370,7 +429,9 @@ public class OnlineTroubleshootingDemo {
         System.out.println("业务线程已启动，可以使用Arthas监控：");
         System.out.println("arthas> dashboard");
         System.out.println("arthas> thread -n 5");
-        System.out.println("arthas> trace com.example.OrderProcessor processOrder");
+        System.out.println(
+            "arthas> trace com.example.OrderProcessor processOrder"
+        );
     }
 
     /**
@@ -380,8 +441,12 @@ public class OnlineTroubleshootingDemo {
     private void simulateProblemMethod() {
         System.out.println("【场景9】启动问题方法调用...");
         System.out.println("可以使用 Arthas 监控：");
-        System.out.println("arthas> trace code.OnlineTroubleshootingDemo slowQueryMethod '#cost>100'");
-        System.out.println("arthas> watch code.OnlineTroubleshootingDemo slowQueryMethod '{params,returnObj}'");
+        System.out.println(
+            "arthas> trace code.OnlineTroubleshootingDemo slowQueryMethod '#cost>100'"
+        );
+        System.out.println(
+            "arthas> watch code.OnlineTroubleshootingDemo slowQueryMethod '{params,returnObj}'"
+        );
 
         ExecutorService executor = Executors.newSingleThreadExecutor(r -> {
             Thread t = new Thread(r, "ProblemMethodThread");
@@ -394,7 +459,9 @@ public class OnlineTroubleshootingDemo {
             while (running) {
                 try {
                     // 调用可能被监控的方法
-                    String result = slowQueryMethod("user_" + random.nextInt(1000));
+                    String result = slowQueryMethod(
+                        "user_" + random.nextInt(1000)
+                    );
                     if (random.nextInt(10) == 0) {
                         System.out.println("查询结果: " + result);
                     }
@@ -472,7 +539,6 @@ public class OnlineTroubleshootingDemo {
             if (random.nextInt(20) == 0) {
                 System.out.println(threadName + " 处理耗时: " + cost + "ms");
             }
-
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

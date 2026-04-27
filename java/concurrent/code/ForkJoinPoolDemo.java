@@ -1,4 +1,3 @@
-package code;
 
 import java.util.concurrent.*;
 import java.util.stream.LongStream;
